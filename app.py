@@ -1,5 +1,6 @@
 from flask import Flask, request
 import requests
+import json
 
 
 app = Flask(__name__)
@@ -17,13 +18,14 @@ def hello():
 
 @app.route("/sns", methods=['POST'])
 def sns():
+    data = json.loads(request.data)
+    print("data == ", data)
     if request.headers.get(SNS_TYPE) == SNS_CONFIRMATION:
         print("receive sns confirmation")
-        sub_url = request.values.get(SNS_SUB_URL)
+        sub_url = data.get(SNS_SUB_URL)
         print("sub url == ", sub_url)
         r = requests.get(sub_url)
         print("requests result == ", r)
-
 
     print("headers == \n", request.headers)
     print("values == \n", request.values)
